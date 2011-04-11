@@ -21,22 +21,23 @@ This will instantiate an instance of the CapELB class and add hooks to remove/re
     
     namespace :elb do
       capELB = CapELB.new()
-  
+
       task :remove do 
         servers = roles[:web].servers.map {|server| server.host}
-        pp servers
+        puts "Removing #{servers} from ELB"
         capELB.remove servers
       end
 
       task :add do 
         servers = roles[:web].servers.map {|server| server.host}
+        puts "Adding #{servers} to ELB"
         capELB.add servers
       end
-  
+
       task :save do
         capELB.save_config
       end
-  
+
       task :check do 
         puts capELB.check_config
       end
