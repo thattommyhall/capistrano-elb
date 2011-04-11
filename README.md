@@ -17,6 +17,8 @@ then just
 This will instantiate an instance of the CapELB class and add hooks to remove/readd before/after deploys
 
 (Equivalent to having the following in your deploy.rb)
+    require "capistrano-elb"
+    
     namespace :elb do
       capELB = CapELB.new()
   
