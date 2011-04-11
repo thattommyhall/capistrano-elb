@@ -1,4 +1,4 @@
-=Capistrano-ELB=
+=CapistranoELB=
 A simple library to control Amazon Elastic Load Balancers for use within Capistrano
 
 ==Install==

@@ -1,9 +1,9 @@
 Gem::Specification.new do |s|
   s.name = "capistrano-elb"
-  s.version = "0.1"
+  s.version = "0.2"
   s.authors = ["thattommyhall"]
   s.files = ["lib/capistrano-elb.rb", "lib/capistrano-elb/tasks.rb"]
-  s.summary = "add/remove servers from ELB loadblancers automagically"
+  s.summary = "Automagically remove/readd servers from EC2 load balancers as you cap deploy "
   s.require_paths = ["lib"]
   s.rubygems_version = "1.3.5"
   s.add_dependency('fog')
@@ -12,5 +12,5 @@ Gem::Specification.new do |s|
   s.description = "Remove servers automagically from ELB before deploy"
   s.email = "tom.hall@forward.co.uk"
 
-  s.homepage = %q{http://www.thattommyhall.com}
+  s.homepage = %q{https://github.com/thattommyhall/capistrano-elb}
 end
