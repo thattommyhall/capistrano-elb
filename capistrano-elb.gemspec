@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "capistrano-elb"
-  s.version = "0.2.5"
+  s.version = "0.2.6"
   s.authors = ["thattommyhall"]
   s.date = '2011-04-11'
   s.files = ["lib/capistrano-elb.rb", "lib/capistrano-elb/tasks.rb"]
