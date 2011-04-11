@@ -1,3 +1,6 @@
 ec2credentials.yaml*
 lbs.yaml*
 *.gem
+.bundle
+Gemfile.lock
+pkg/*
