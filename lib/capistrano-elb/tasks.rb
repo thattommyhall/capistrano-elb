@@ -1,5 +1,4 @@
 require "capistrano-elb"
-require "pp"
 
 Capistrano::Configuration.instance(:must_exist).load do
   namespace :elb do
@@ -7,13 +6,13 @@ Capistrano::Configuration.instance(:must_exist).load do
     
     task :remove do 
       servers = roles[:web].servers.map {|server| server.host}
-      pp "Removing #{servers} from ELB"
+      puts "Removing #{servers} from ELB"
       capELB.remove servers
     end
 
     task :add do 
       servers = roles[:web].servers.map {|server| server.host}
-      pp "Readding #{servers} from ELB"
+      puts "Readding #{servers} to ELB"
       capELB.add servers
     end
     
