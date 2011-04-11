@@ -43,8 +43,9 @@ This will instantiate an instance of the CapELB class and add hooks to remove/re
     before "deploy", "elb:remove"
     after "deploy", "elb:add"
 
-The first time you run it a record of the ELB setup is saved to config/lbs.yaml, you can update/chech this with 
+The first time you run it a record of the ELB setup is saved to config/lbs.yaml, you can check/update this with 
     cap elb:check
     cap elb:save
     
 
+You can just require capistrano-elb and do whatever you want inside your deploy scripts of course
