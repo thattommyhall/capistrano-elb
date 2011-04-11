@@ -60,7 +60,7 @@ class CapELB
         errors << "#{extra} should not be in #{region}/#{lbname}" unless extra.empty?
       end
     end
-    puts (errors.empty? ? "ELB config correct" : errors) 
+    (errors.empty? ? "ELB config correct" : errors) 
   end
   
   def add(serverlist)
