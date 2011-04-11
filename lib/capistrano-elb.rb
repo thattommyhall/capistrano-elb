@@ -2,7 +2,6 @@ require 'fog'
 require 'yaml'
 require 'capistrano'
 require 'pp'
-# require "dir"
 
 class CapELB
   def initialize(configdir=File.join(Dir.pwd, 'config'))
@@ -51,7 +50,17 @@ class CapELB
   end
   
   def check_config
-    load_config == config_from_aws
+    current = config_from_aws
+    errors = []
+    load_config.each_pair do |region,lbs|
+      lbs.each_pair do |lbname, target_instances|
+        missing = target_instances - current[region][lbname]
+        extra = current[region][lbname] - target_instances
+        errors << "#{missing} are missing from #{region}/#{lbname}" unless missing.empty?
+        errors << "#{extra} should not be in #{region}/#{lbname}" unless extra.empty?
+      end
+    end
+    puts (errors.empty? ? "ELB config correct" : errors) 
   end
   
   def add(serverlist)
@@ -75,6 +84,3 @@ class CapELB
     end
   end
 end
-
-
-

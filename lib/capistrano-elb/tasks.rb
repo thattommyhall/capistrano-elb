@@ -12,7 +12,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     task :add do 
       servers = roles[:web].servers.map {|server| server.host}
-      puts "Readding #{servers} to ELB"
+      puts "Adding #{servers} to ELB"
       capELB.add servers
     end
     
