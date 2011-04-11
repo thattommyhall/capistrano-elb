@@ -5,13 +5,18 @@ A simple library to control Amazon Elastic Load Balancers for use within Capistr
 gem install capistrano-elb
 
 ## Usage
-require "capistrano-elb/tasks"
+You should have ec2credentials.yaml in the same directory as your cap files
+    #ec2credentials.yaml
+    --- 
+    :aws_access_key_id: YOUR_KEY_ID_
+    :aws_secret_access_key: YOUR_KEY
+
+then just 
+    require "capistrano-elb/tasks"
 
 This will instantiate an instance of the CapELB class and add hooks to remove/readd before/after deploys
 
-requiring "tasks" is equivalent to having the folling in your deploy.rb
-
-
+(Equivalent to having the following in your deploy.rb)
     namespace :elb do
       capELB = CapELB.new()
   
@@ -38,6 +43,8 @@ requiring "tasks" is equivalent to having the folling in your deploy.rb
     before "deploy", "elb:remove"
     after "deploy", "elb:add"
 
+The first time you run it a record of the ELB setup is saved to config/lbs.yaml, you can update/chech this with 
+    cap elb:check
+    cap elb:save
+    
 
-You can do 
-cap elb:save
