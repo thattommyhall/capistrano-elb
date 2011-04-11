@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "capistrano-elb"
-  s.version = "0.2"
+  s.version = "0.2.2"
   s.authors = ["thattommyhall"]
   s.files = ["lib/capistrano-elb.rb", "lib/capistrano-elb/tasks.rb"]
   s.summary = "Automagically remove/readd servers from EC2 load balancers as you cap deploy "

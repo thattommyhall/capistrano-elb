@@ -49,3 +49,6 @@ The first time you run it a record of the ELB setup is saved to config/lbs.yaml,
     
 
 You can just require capistrano-elb and do whatever you want inside your deploy scripts of course
+
+If you want to hook after deploy but before the elb:add you can target 
+    after deploy:restart :your_task
