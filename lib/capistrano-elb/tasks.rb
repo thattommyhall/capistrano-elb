@@ -24,4 +24,8 @@ Capistrano::Configuration.instance(:must_exist).load do
       puts capELB.check_config
     end
   end
+  
+  before "deploy", "elb:remove"
+  after "deploy", "elb:add"
+  
 end
