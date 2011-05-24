@@ -6,17 +6,20 @@ gem install capistrano-elb
 
 ## Usage
 You should have ec2credentials.yaml in the same directory as your cap files
+
     #ec2credentials.yaml
     --- 
     :aws_access_key_id: YOUR_KEY_ID_
     :aws_secret_access_key: YOUR_KEY
 
 then just 
+    
     require "capistrano-elb/tasks"
 
 This will instantiate an instance of the CapELB class and add hooks to remove/readd before/after deploys
 
 (Equivalent to having the following in your deploy.rb)
+
     require "capistrano-elb"
     
     namespace :elb do
