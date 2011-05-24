@@ -6,13 +6,11 @@ Capistrano::Configuration.instance(:must_exist).load do
     
     task :remove do 
       servers = roles[:web].servers.map {|server| server.host}
-      puts "Removing #{servers} from ELB"
       capELB.remove servers
     end
 
     task :add do 
       servers = roles[:web].servers.map {|server| server.host}
-      puts "Adding #{servers} to ELB"
       capELB.add servers
     end
     
