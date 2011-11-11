@@ -82,7 +82,7 @@ class CapELB
         server_ids = @compute[region].servers.select{|server| serverlist.include? server.dns_name}.map{|server| server.id}
         to_change = server_ids.select{|server_id| target_instances.include? server_id}
         unless to_change.empty?
-          puts "Removing #{to_change} from LB #{lbname} in #{region}"        
+          puts "Removing #{to_change} from LB #{lbname} in #{reg}"        
           @elb[region].deregister_instances_from_load_balancer(to_change, lbname)
         end
       end
