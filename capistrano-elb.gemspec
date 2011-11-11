@@ -14,8 +14,7 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "capistrano-elb"
 
-  s.add_dependency('fog', '0.11.0')
-  # s.add_dependency('excon')
+  s.add_dependency('fog')
   s.add_dependency('capistrano')
 
   s.files         = `git ls-files`.split("\n")
