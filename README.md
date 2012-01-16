@@ -18,6 +18,8 @@ then just
 
 This will instantiate an instance of the CapELB class and add hooks to remove/readd before/after deploys
 
+As of version 0.4.0 it looks for an 'elb' tag with value of the name of a loadbalancer to decide when to remove/readd servers.
+
 (Equivalent to having the following in your deploy.rb)
 
     require "capistrano-elb"
@@ -37,10 +39,6 @@ This will instantiate an instance of the CapELB class and add hooks to remove/re
         capELB.add servers
       end
 
-      task :save do
-        capELB.save_config
-      end
-
       task :check do 
         puts capELB.check_config
       end
@@ -48,11 +46,6 @@ This will instantiate an instance of the CapELB class and add hooks to remove/re
 
     before "deploy", "elb:remove"
     after "deploy", "elb:add"
-
-The first time you run it a record of the ELB setup is saved to config/lbs.yaml, you can check/update this with 
-    cap elb:check
-    cap elb:save
-    
 
 You can just require capistrano-elb and do whatever you want inside your deploy scripts of course
 

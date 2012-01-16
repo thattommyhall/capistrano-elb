@@ -3,12 +3,17 @@ require 'yaml'
 require 'capistrano'
 require 'pp'
 
+class Hash
+  def diff(h2)
+    dup.delete_if { |k, v| h2[k] == v }.merge!(h2.dup.delete_if { |k, v| has_key?(k) })
+  end
+end
+
 class CapELB
   def initialize(configdir=File.join(Dir.pwd, 'config'))
     ec2credentials = YAML::load(File.open(File.join(configdir, 'ec2credentials.yaml')))
     aws = Fog::Compute.new(ec2credentials.merge({:provider=>'AWS'}))
     @regions = aws.describe_regions.body["regionInfo"].map {|region| region["regionName"]}
-    @regions -= ['us-west-2']
     @compute = {}
     @regions.each do |region|
       @compute.merge!(region => Fog::Compute.new(ec2credentials.merge({:provider=>'AWS',:region=>region})))
@@ -19,40 +24,37 @@ class CapELB
       @elb.merge!(region => Fog::AWS::ELB.new(ec2credentials.merge(:region=>region)))
     end
     
-    @lbsfile = File.join(configdir, 'lbs.yaml') 
-    
-    @lbs = load_config
+    @lbs = config_from_tags
   end
   
-  def config_from_aws
+  def config_from_tags
     lbs = {}
     @regions.each do |region| 
-      loadBalancerDescriptions = 
-        @elb[region].describe_load_balancers.body["DescribeLoadBalancersResult"]["LoadBalancerDescriptions"]
-      loadBalancerDescriptions.each do |lb|
-        lbs.merge!({region => {lb["LoadBalancerName"] => lb["Instances"]}})
+      @elb[region].load_balancers.each do |lb|
+        lbs.merge!({region => {lb.id => get_instances(region,lb.id)}})
       end
     end
     lbs
   end
   
-  def save_config
-    File.open( @lbsfile, 'w' ) do |file|
-       YAML.dump( config_from_aws, file )
+  def config_from_lb
+    lbs = {}
+    @regions.each do |region| 
+      @elb[region].load_balancers.each do |lb|
+        lbs.merge!({region => {lb.id => lb.instances}})
+      end
     end
+    lbs
   end
   
-  def load_config
-    unless File.exists? @lbsfile
-       save_config
-     end
-    YAML::load(File.open(@lbsfile))
+  def get_instances(region,lbname)
+    @compute[region].tags.select{|tag| tag.key == 'elb' and tag.value==lbname}.map(&:resource_id)
   end
   
   def check_config
-    current = config_from_aws
+    current = config_from_lb
     errors = []
-    load_config.each_pair do |region,lbs|
+    @lbs.each_pair do |region,lbs|
       lbs.each_pair do |lbname, target_instances|
         missing = target_instances - current[region][lbname]
         extra = current[region][lbname] - target_instances
