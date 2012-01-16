@@ -1,5 +1,6 @@
 # CapistranoELB
 A simple library to control Amazon Elastic Load Balancers for use within Capistrano
+
 *As of version 0.4.0 it looks for an 'elb' tag with value of the name of a loadbalancer to decide when to remove/readd servers.*
 
 ## Install
