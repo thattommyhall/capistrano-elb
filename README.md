@@ -1,5 +1,6 @@
 # CapistranoELB
 A simple library to control Amazon Elastic Load Balancers for use within Capistrano
+*As of version 0.4.0 it looks for an 'elb' tag with value of the name of a loadbalancer to decide when to remove/readd servers.*
 
 ## Install
 gem install capistrano-elb
@@ -17,8 +18,6 @@ then just
     require "capistrano-elb/tasks"
 
 This will instantiate an instance of the CapELB class and add hooks to remove/readd before/after deploys
-
-As of version 0.4.0 it looks for an 'elb' tag with value of the name of a loadbalancer to decide when to remove/readd servers.
 
 (Equivalent to having the following in your deploy.rb)
 
