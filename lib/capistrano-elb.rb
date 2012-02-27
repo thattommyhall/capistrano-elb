@@ -10,18 +10,17 @@ class Hash
 end
 
 class CapELB
-  def initialize(configdir=File.join(Dir.pwd, 'config'))
-    ec2credentials = YAML::load(File.open(File.join(configdir, 'ec2credentials.yaml')))
-    aws = Fog::Compute.new(ec2credentials.merge({:provider=>'AWS'}))
+  def initialize(configdir=File.join(Dir.pwd, 'config'))    
+    aws = Fog::Compute.new{:provider=>'AWS'})
     @regions = aws.describe_regions.body["regionInfo"].map {|region| region["regionName"]}
     @compute = {}
     @regions.each do |region|
-      @compute.merge!(region => Fog::Compute.new(ec2credentials.merge({:provider=>'AWS',:region=>region})))
+      @compute.merge!(region => Fog::Compute.new({:provider=>'AWS',:region=>region}))
     end
 
     @elb = {}
     @regions.each do |region|
-      @elb.merge!(region => Fog::AWS::ELB.new(ec2credentials.merge(:region=>region)))
+      @elb.merge!(region => Fog::AWS::ELB.new(:region=>region))
     end
     
     @lbs = config_from_tags

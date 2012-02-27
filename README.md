@@ -7,12 +7,9 @@ A simple library to control Amazon Elastic Load Balancers for use within Capistr
 gem install capistrano-elb
 
 ## Usage
-You should have ec2credentials.yaml in the same directory as your cap files
+You may optionally configure Fog:
 
-    #ec2credentials.yaml
-    --- 
-    :aws_access_key_id: YOUR_KEY_ID_
-    :aws_secret_access_key: YOUR_KEY
+Fog.credentials_path = /path/to/.fog
 
 then just 
     
