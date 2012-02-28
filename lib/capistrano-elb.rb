@@ -11,7 +11,7 @@ end
 
 class CapELB
   def initialize(configdir=File.join(Dir.pwd, 'config'))    
-    aws = Fog::Compute.new{:provider=>'AWS'})
+    aws = Fog::Compute.new({:provider=>'AWS'})
     @regions = aws.describe_regions.body["regionInfo"].map {|region| region["regionName"]}
     @compute = {}
     @regions.each do |region|
