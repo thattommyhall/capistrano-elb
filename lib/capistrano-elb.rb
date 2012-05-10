@@ -10,18 +10,17 @@ class Hash
 end
 
 class CapELB
-  def initialize(configdir=File.join(Dir.pwd, 'config'))
-    ec2credentials = YAML::load(File.open(File.join(configdir, 'ec2credentials.yaml')))
-    aws = Fog::Compute.new(ec2credentials.merge({:provider=>'AWS'}))
+  def initialize(configdir=File.join(Dir.pwd, 'config'))    
+    aws = Fog::Compute.new({:provider=>'AWS'})
     @regions = aws.describe_regions.body["regionInfo"].map {|region| region["regionName"]}
     @compute = {}
     @regions.each do |region|
-      @compute.merge!(region => Fog::Compute.new(ec2credentials.merge({:provider=>'AWS',:region=>region})))
+      @compute.merge!(region => Fog::Compute.new({:provider=>'AWS',:region=>region}))
     end
 
     @elb = {}
     @regions.each do |region|
-      @elb.merge!(region => Fog::AWS::ELB.new(ec2credentials.merge(:region=>region)))
+      @elb.merge!(region => Fog::AWS::ELB.new(:region=>region))
     end
     
     @lbs = config_from_tags
@@ -68,7 +67,8 @@ class CapELB
   def add(serverlist)
     @lbs.each_pair do |region, lbs|
       lbs.each_pair do |lbname, target_instances|
-        server_ids = @compute[region].servers.select{|server| serverlist.include? server.dns_name}.map{|server| server.id}
+        serverlist_hostnames = serverlist.map {|i| i.to_s }
+        server_ids = @compute[region].servers.select{|server| serverlist_hostnames.include?(server.dns_name)}.map{|server| server.id}
         to_change = server_ids.select{|server_id| target_instances.include? server_id}
         unless to_change.empty?
           puts "Adding #{to_change} to LB #{lbname} in #{region}" 
@@ -81,7 +81,8 @@ class CapELB
   def remove(serverlist)
     @lbs.each_pair do |region, lbs|
       lbs.each_pair do |lbname, target_instances|
-        server_ids = @compute[region].servers.select{|server| serverlist.include? server.dns_name}.map{|server| server.id}
+        serverlist_hostnames = serverlist.map {|i| i.to_s }
+        server_ids = @compute[region].servers.select{|server| serverlist_hostnames.include? server.dns_name}.map{|server| server.id}
         to_change = server_ids.select{|server_id| target_instances.include? server_id}
         unless to_change.empty?
           puts "Removing #{to_change} from LB #{lbname} in #{region}"        
